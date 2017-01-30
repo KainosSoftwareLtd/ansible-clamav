@@ -1,4 +1,4 @@
-Fail2ban
+# clamav
 =========
 
 A role that installs and configures clamav.

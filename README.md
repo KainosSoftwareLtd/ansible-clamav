@@ -41,17 +41,17 @@ For more low-level configuration details the `clamav_clamd_config` and `clamav_f
 
 ```
 clamav_clamd_config:
-  PidFile: '{{ clamav_run_dir }}/clamd.pid'
-  DatabaseDirectory: '{{ clamav_data_dir }}'
+  PidFile: '/var/run/clamd.scan/clamd.pid'
+  DatabaseDirectory: '/var/lib/clamav'
   TemporaryDirectory: '/var/tmp'
-  LocalSocket: '{{ clamav_run_dir }}/clamd.sock'
+  LocalSocket: '/var/run/clamd.scan/clamd.sock'
   FixStaleSocket: 'yes'
-  TCPSocket: '{{ clamav_clamd_port }}'
+  TCPSocket: '3310'
   TCPAddr: 127.0.0.1
   MaxConnectionQueueLength: 30
   MaxThreads: 50
   ReadTimeout: 300
-  User: '{{ clamav_user }}'
+  User: 'root'
   AllowSupplementaryGroups: 'yes'
   ScanPE: 'yes'
   ScanELF: 'yes'
@@ -69,8 +69,8 @@ clamav_clamd_config:
   OnAccessPrevention: 'no'
   OnAccessExcludeUID: 0
 clamav_freshclam_config:
-  DatabaseDirectory: '{{ clamav_data_dir }}'
-  DatabaseOwner: '{{ clamav_user }}'
+  DatabaseDirectory: '/var/lib/clamav'
+  DatabaseOwner: 'root'
   DatabaseMirror: database.clamav.net
   UpdateLogFile: /var/log/freshclam.log
   LogSyslog: 'yes'
@@ -86,8 +86,8 @@ When overriding these variables remember that ansible by default will __not__ me
 
 ```
 clamav_freshclam_config:
-  DatabaseDirectory: '{{ clamav_data_dir }}'
-  DatabaseOwner: '{{ clamav_user }}'
+  DatabaseDirectory: '/var/lib/clamav'
+  DatabaseOwner: 'root'
   DatabaseMirror: database.clamav.net
   UpdateLogFile: /var/log/freshclam.log
   LogSyslog: 'yes'

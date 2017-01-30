@@ -78,9 +78,12 @@ clamav_freshclam_config:
   LogRotate: 'no'
 ```
 
-Of note are the clamav_clamd_config.LogFile key; this is used in the ansible role so if your overriding these variables then this __must__ exist otherwise you'll get variable 'undefined' errors on execution.
+Note that ansible requires unique key/value pairs; if you duplicate a key only the last occurance within the hash will be recognised.
+
+The clamav_clamd_config.LogFile key is quite important; this is used in the ansible role so if your overriding this variable then this key __must__ exist otherwise you'll get variable 'undefined' errors on execution.
 
 When overriding these variables remember that ansible by default will __not__ merge hashes; this means to tweak the LogRotate value in `clamav_freshclam_config` above you would need to duplicate the whole block as and then make your change as per below:
+
 ```
 clamav_freshclam_config:
   DatabaseDirectory: '{{ clamav_data_dir }}'

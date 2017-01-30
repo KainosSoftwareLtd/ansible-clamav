@@ -1,0 +1,84 @@
+---
+
+# Package to be installed (explicit version can be specified here)
+clamav_packages:
+  - name: clamav
+    state: installed
+  - name: clamav-update
+    state: installed
+  - name: clamav-scanner-systemd
+    state: installed
+  - name: libsemanage-python
+    state: installed
+
+# Selinux settings
+clamav_selinux_enabled: true
+clamav_selinux_bools:
+  - { name: antivirus_can_scan_system, value: 1 }
+
+# Root is required for on-access scanning
+clamav_user: root
+clamav_group: root
+
+# Systemd service name
+clamav_service: 'clamd@scan'
+
+# Configuration directories
+clamav_confd_dir: /etc/clamd.d
+clamav_run_dir: /var/run/clamd.scan
+clamav_data_dir: /var/lib/clamav
+clamav_clamd_port: 3310
+
+# Include any custom configuration here; no deplicates as it needs unique key/value pairs
+# Keys should match the capitalisation of the normal values in the config file
+clamav_clamd_config:
+  PidFile: '{{ clamav_run_dir }}/clamd.pid'
+  DatabaseDirectory: '{{ clamav_data_dir }}'
+  TemporaryDirectory: '/var/tmp'
+  LocalSocket: '{{ clamav_run_dir }}/clamd.sock'
+  FixStaleSocket: 'yes'
+  TCPSocket: '{{ clamav_clamd_port }}'
+  TCPAddr: 127.0.0.1
+  MaxConnectionQueueLength: 30
+  MaxThreads: 50
+  ReadTimeout: 300
+  User: '{{ clamav_user }}'
+  AllowSupplementaryGroups: 'yes'
+  ScanPE: 'yes'
+  ScanELF: 'yes'
+  DetectBrokenExecutables: 'yes'
+  ScanOLE2: 'yes'
+  ScanMail: 'yes'
+  ScanArchive: 'yes'
+  ArchiveBlockEncrypted: 'no'
+  LogFile: /var/log/clamd.log
+  LogFileMaxSize: 0
+  LogTime: 'yes'
+  LogSyslog: 'yes'
+  LogRotate: 'no'
+  OnAccessMaxFileSize: 5242880
+  OnAccessPrevention: 'no'
+  OnAccessExcludeUID: 0
+
+# Enabling this is likely to have a significant performance impact to your system
+clamav_onaccess_scanning: true
+
+# Specify mount paths or file paths you want to include as part of your on-access configuration
+clamav_onaccess_conf:
+  mount_path: []
+  include_path: []
+  exclude_path: []
+
+clamav_daily_cron_enabled: true
+
+clamav_daily_updates_enabled: true
+
+# Freshclam Database Updates
+clamav_freshclam_config:
+  DatabaseDirectory: '{{ clamav_data_dir }}'
+  DatabaseOwner: '{{ clamav_user }}'
+  DatabaseMirror: database.clamav.net
+  UpdateLogFile: /var/log/freshclam.log
+  LogSyslog: 'yes'
+  LogTime: 'yes'
+  LogRotate: 'no'

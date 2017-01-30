@@ -1,0 +1,5 @@
+---
+- name: Clamav | Restart clamd service
+  service:
+    name: "{{ clamav_service }}"
+    state: restarted

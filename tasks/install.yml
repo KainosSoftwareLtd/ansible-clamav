@@ -1,0 +1,6 @@
+---
+- name: Clamav | Install packages
+  yum:
+    name: '{{ item.name }}'
+    state: '{{ item.state }}'
+  with_items: "{{ clamav_packages }}"

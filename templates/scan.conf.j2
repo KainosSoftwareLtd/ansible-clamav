@@ -1,0 +1,34 @@
+#{{ ansible_managed }}
+{% for key, value in clamav_clamd_config.iteritems() %}
+{{ key }} {{ value }}
+{% endfor %}
+
+# Onaccess scanning configuration
+{% if clamav_onaccess_scanning %}
+ScanOnAccess yes
+
+{% if clamav_onaccess_conf['mount_path'] | length > 0 %}
+# Mount paths
+{% for location in clamav_onaccess_conf['mount_path'] %}
+OnAccessMountPath {{ location }}
+{% endfor %}
+{% endif %}
+
+{% if clamav_onaccess_conf['include_path'] | length > 0 %}
+# Included file paths
+{% for location in clamav_onaccess_conf['include_path'] %}
+OnAccessIncludePath {{ location }}
+{% endfor %}
+{% endif %}
+
+{% if clamav_onaccess_conf['exclude_path'] | length > 0 %}
+# Excluded file paths
+{% for location in clamav_onaccess_conf['exclude_path'] %}
+OnAccessExcludePath {{ location }}
+{% endfor %}
+{% endif %}
+{% else %}
+ScanOnAccess no
+{% endif %}
+
+

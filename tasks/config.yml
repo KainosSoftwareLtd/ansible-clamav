@@ -1,0 +1,98 @@
+---
+- name: Clamav | Selinux booleans
+  seboolean:
+    name: '{{ item.name }}'
+    state: '{{ item.value }}'
+    persistent: yes
+  with_items: '{{ clamav_selinux_bools }}'
+  when: clamav_selinux_enabled
+
+- name: Clamav | Global directories
+  file:
+    path: '{{ item }}'
+    state: directory
+    mode: '0775'
+    owner: 'root'
+    group: 'root'
+  with_items:
+    - '{{ clamav_confd_dir }}'
+
+- name: Clamav | Process directories
+  file:
+    path: '{{ item }}'
+    state: directory
+    mode: '0770'
+    owner: '{{ clamav_user }}'
+    group: '{{ clamav_group }}'
+  with_items:
+    - '{{ clamav_data_dir }}'
+
+- name: Clamav | Log files
+  file:
+    path: '{{ item }}'
+    state: touch
+    mode: '0660'
+    owner: '{{ clamav_user }}'
+    group: '{{ clamav_group }}'
+  with_items:
+   - '{{ clamav_clamd_config.LogFile }}'
+   - '{{ clamav_freshclam_config.UpdateLogFile }}'
+
+- name: Clamav | Configuration files
+  template:
+    src: '{{ item.src }}'
+    dest: '{{ item.dest }}'
+    owner: root
+    group: root
+    mode: '0644'
+  with_items:
+    - { src: 'scan.conf.j2' , dest: '{{ clamav_confd_dir }}/scan.conf'}
+    - { src: 'freshclam.conf.j2' , dest: '/etc/freshclam.conf'}
+  notify:
+    - Restart clamd service
+
+# List all configuration files
+- name: Clamav | List config files
+  find:
+    paths: '{{ clamav_confd_dir }}'
+    file_type: file
+  register: clamav_config_files
+
+# Remove any configuration files not explicitly managed by ansible
+- name: Clamav | Remove unmanaged config files
+  file:
+    path: '{{ item.path }}'
+    state: absent
+    force: yes
+  with_items: '{{ clamav_config_files.files }}'
+  when: ('scan.conf' not in '{{ item.path }}')
+
+- name: Clamav | Schedule daily database updates
+  cron:
+    name: Update Clamav Database
+    special_time: daily
+    job: freshclam
+    user: '{{ clamav_user }}'
+  when: clamav_daily_updates_enabled
+
+- name: Clamav | Create daily scan script
+  template:
+    src: daily_scan.cron.j2
+    dest: /root/clamav_daily_scan.sh
+    owner: root
+    group: root
+    mode: '0550'
+  when: clamav_daily_cron_enabled
+
+- name: Clamav | Schedule daily scan
+  cron:
+    name: 'Execute Daily ClamAV Scan'
+    special_time: daily
+    state: 'present'
+    user: root
+    job: '/root/clamav_daily_scan.sh'
+    cron_file: 'clamav_daily'
+  when: clamav_daily_cron_enabled
+
+- name: flush handlers to restart clamav immediately
+  meta: flush_handlers

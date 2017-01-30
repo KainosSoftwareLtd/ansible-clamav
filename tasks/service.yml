@@ -1,0 +1,6 @@
+---
+- name: Clamav | Start service
+  service:
+    name: "{{ clamav_service }}"
+    state: started
+    enabled: yes

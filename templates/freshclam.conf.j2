@@ -1,0 +1,4 @@
+#{{ ansible_managed }}
+{% for key, value in clamav_freshclam_config.iteritems() %}
+{{ key }} {{ value }}
+{% endfor %}

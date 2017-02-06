@@ -49,7 +49,7 @@
     - { src: 'scan.conf.j2' , dest: '{{ clamav_confd_dir }}/scan.conf'}
     - { src: 'freshclam.conf.j2' , dest: '/etc/freshclam.conf'}
   notify:
-    - Restart clamd service
+    - ClamAV | Restart clamd service
 
 # List all configuration files
 - name: Clamav | List config files

@@ -71,6 +71,12 @@ clamav_onaccess_conf:
 
 clamav_daily_cron_enabled: true
 
+clamav_daily_cron_exclusions:
+  - /dev 
+  - /proc 
+  - /run 
+  - /sys
+
 clamav_daily_updates_enabled: true
 
 # Freshclam Database Updates

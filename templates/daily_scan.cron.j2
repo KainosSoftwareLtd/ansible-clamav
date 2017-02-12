@@ -3,7 +3,7 @@
 ###############################################################################
 START_TIME=`date`
 echo "Starting ClamAV Scan at ${START_TIME}" 2&>> {{ clamav_clamd_config.LogFile }}
-clamscan --infected --recursive=yes --exclude-dir=/proc --exclude-dir=/run --exclude-dir=/opt/gitlab/embedded/service/gem/ruby/2.1.0 --exclude-dir=/dev --exclude-dir=/sys --exclude-dir=/srv / 2&>> {{ clamav_clamd_config.LogFile }}
+clamscan --infected --recursive=yes --exclude-dir={{ clamav_daily_cron_exclusions|join(' --exclude-dir=') }} / 2&>> {{ clamav_clamd_config.LogFile }}
 
 case $? in
   1)

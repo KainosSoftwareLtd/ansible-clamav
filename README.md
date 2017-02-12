@@ -14,7 +14,7 @@ Limitations
 Requirements
 ------------
 
-At the moment this has only been tested with Centos 7 servers.
+At the moment this has only been tested with Centos 7 servers and requires the [EPEL repository](https://fedoraproject.org/wiki/EPEL) in order to install the ClamAV packages. 
 
 Quickstart
 ----------

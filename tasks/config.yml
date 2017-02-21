@@ -51,6 +51,12 @@
   notify:
     - 'Clamav | Restart clamd service'
 
+- name: Clamav | Enable Freshclam Update
+  lineinfile:
+    state: absent
+    dest: '/etc/sysconfig/freshclam'
+    regexp: '^FRESHCLAM_DELAY='
+
 # List all configuration files
 - name: Clamav | List config files
   find:

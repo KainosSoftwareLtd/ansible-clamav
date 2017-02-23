@@ -2,8 +2,8 @@
 # ClamAV Daily Scan
 ###############################################################################
 START_TIME=`date`
-echo "Starting ClamAV Scan at ${START_TIME}" 2&>> {{ clamav_clamd_config.LogFile }}
-clamscan --infected --recursive=yes --exclude-dir={{ clamav_daily_cron_exclusions|join(' --exclude-dir=') }} / 2&>> {{ clamav_clamd_config.LogFile }}
+echo "Starting ClamAV Scan at ${START_TIME}" &>> {{ clamav_clamd_config.LogFile }}
+clamscan --infected --recursive=yes --exclude-dir={{ clamav_daily_cron_exclusions|join(' --exclude-dir=') }} / &>> {{ clamav_clamd_config.LogFile }}
 
 case $? in
   1)
@@ -18,4 +18,4 @@ case $? in
 esac
 
 FINISH_TIME=`date`
-echo "Finished ClamAV Scan at ${FINISH_TIME}" 2&>> {{ clamav_clamd_config.LogFile }}
+echo "Finished ClamAV Scan at ${FINISH_TIME}" &>> {{ clamav_clamd_config.LogFile }}

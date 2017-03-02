@@ -2,3 +2,9 @@
 {% for key, value in clamav_freshclam_config.iteritems() %}
 {{ key }} {{ value }}
 {% endfor %}
+
+{% if clamav_http_proxy_enabled %}
+# Proxy config
+HTTPProxyServer {{ clamav_http_proxy_ip }}
+HTTPProxyPort {{ clamav_http_proxy_port }}
+{% endif %}

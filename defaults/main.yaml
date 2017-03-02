@@ -72,9 +72,9 @@ clamav_onaccess_conf:
 clamav_daily_cron_enabled: true
 
 clamav_daily_cron_exclusions:
-  - /dev 
-  - /proc 
-  - /run 
+  - /dev
+  - /proc
+  - /run
   - /sys
 
 clamav_daily_updates_enabled: true
@@ -88,3 +88,8 @@ clamav_freshclam_config:
   LogSyslog: 'yes'
   LogTime: 'yes'
   LogRotate: 'no'
+
+
+clamav_http_proxy_enabled: false
+clamav_http_proxy_ip: ""
+clamav_http_proxy_port: ""

@@ -5,7 +5,7 @@ clamav_packages:
   - name: clamav
     state: installed
   - name: clamav-update
-    state: absent
+    state: installed
   - name: clamav-scanner-systemd
     state: installed
   - name: libsemanage-python
@@ -76,8 +76,6 @@ clamav_daily_cron_exclusions:
   - /proc
   - /run
   - /sys
-
-clamav_daily_updates_enabled: true
 
 # Freshclam Database Updates
 clamav_freshclam_config:

@@ -57,6 +57,12 @@
     dest: '/etc/sysconfig/freshclam'
     regexp: '^FRESHCLAM_DELAY='
 
+- name: Clamav | Edit freshclam-sleep to be verbous about errors and warnings
+  lineinfile:
+    dest: /usr/share/clamav/freshclam-sleep
+    regexp: '^/usr/bin/freshclam --quiet && {'
+    line: "/usr/bin/freshclam 2>&1 | egrep -i 'error|warning' && {"
+
 # List all configuration files
 - name: Clamav | List config files
   find:
@@ -79,6 +85,7 @@
     special_time: daily
     job: freshclam 2>&1 | egrep -i 'error|warning'
     user: '{{ clamav_user }}'
+    state: absent
   when: clamav_daily_updates_enabled
 
 - name: Clamav | Create daily scan script

@@ -77,7 +77,7 @@
   cron:
     name: Update Clamav Database
     special_time: daily
-    job: freshclam
+    job: freshclam 2>&1 | egrep -i 'error|warning'
     user: '{{ clamav_user }}'
   when: clamav_daily_updates_enabled
 

@@ -3,7 +3,7 @@
   seboolean:
     name: '{{ item.name }}'
     state: '{{ item.value }}'
-    persistent: yes
+    persistent: 'yes'
   with_items: '{{ clamav_selinux_bools }}'
   when: clamav_selinux_enabled
 
@@ -35,8 +35,8 @@
     owner: '{{ clamav_user }}'
     group: '{{ clamav_group }}'
   with_items:
-   - '{{ clamav_clamd_config.LogFile }}'
-   - '{{ clamav_freshclam_config.UpdateLogFile }}'
+    - '{{ clamav_clamd_config.LogFile }}'
+    - '{{ clamav_freshclam_config.UpdateLogFile }}'
 
 - name: Clamav | Configuration files
   template:
@@ -46,8 +46,8 @@
     group: root
     mode: '0644'
   with_items:
-    - { src: 'scan.conf.j2' , dest: '{{ clamav_confd_dir }}/scan.conf'}
-    - { src: 'freshclam.conf.j2' , dest: '/etc/freshclam.conf'}
+    - {src: 'scan.conf.j2', dest: '{{ clamav_confd_dir }}/scan.conf'}
+    - {src: 'freshclam.conf.j2', dest: '/etc/freshclam.conf'}
   notify:
     - 'Clamav | Restart clamd service'
 
@@ -69,7 +69,7 @@
   file:
     path: '{{ item.path }}'
     state: absent
-    force: yes
+    force: 'yes'
   with_items: '{{ clamav_config_files.files }}'
   when: ('scan.conf' not in '{{ item.path }}')
 
@@ -77,7 +77,7 @@
   cron:
     name: Update Clamav Database
     special_time: daily
-    job: freshclam
+    job: freshclam 2>&1 | egrep -i 'error|warning'
     user: '{{ clamav_user }}'
   when: clamav_daily_updates_enabled
 

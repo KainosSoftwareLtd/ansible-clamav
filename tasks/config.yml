@@ -79,15 +79,6 @@
   with_items: '{{ clamav_config_files.files }}'
   when: ('scan.conf' not in '{{ item.path }}')
 
-- name: Clamav | Schedule daily database updates
-  cron:
-    name: Update Clamav Database
-    special_time: daily
-    job: freshclam 2>&1 | egrep -i 'error|warning'
-    user: '{{ clamav_user }}'
-    state: absent
-  when: clamav_daily_updates_enabled
-
 - name: Clamav | Create daily scan script
   template:
     src: daily_scan.cron.j2

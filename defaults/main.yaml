@@ -77,8 +77,6 @@ clamav_daily_cron_exclusions:
   - /run
   - /sys
 
-clamav_daily_updates_enabled: true
-
 # Freshclam Database Updates
 clamav_freshclam_config:
   DatabaseDirectory: '{{ clamav_data_dir }}'

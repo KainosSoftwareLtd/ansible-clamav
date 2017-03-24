@@ -62,6 +62,7 @@
     dest: /usr/share/clamav/freshclam-sleep
     regexp: '^/usr/bin/freshclam --quiet && {'
     line: "/usr/bin/freshclam 2>&1 | egrep -i 'error|warning' && {"
+    backrefs: 'yes'
 
 # List all configuration files
 - name: Clamav | List config files

@@ -57,13 +57,6 @@
     dest: '/etc/sysconfig/freshclam'
     regexp: '^FRESHCLAM_DELAY='
 
-- name: Clamav | Edit freshclam-sleep to be verbose about errors and warnings
-  lineinfile:
-    dest: /usr/share/clamav/freshclam-sleep
-    regexp: '^/usr/bin/freshclam --quiet && {'
-    line: "/usr/bin/freshclam 2>&1 | egrep -i 'error|warning' && {"
-    backrefs: 'yes'
-
 # List all configuration files
 - name: Clamav | List config files
   find:
